@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   
-  const cellSize = 5;
-  const aliveChance = 0.1;
+  const cellSize = 10;
+  const chanceOfLife = 0.1;
   const intervalDuration = 30;
 
   const containerWidth = window.innerWidth;
@@ -19,19 +19,61 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.prepend(canvas);
 
   let state = [...Array(numRows)].map(() => Array(numCols).fill(null));
-  for (let y = 0; y < numRows; y++) {
-    for (let x = 0; x < numCols; x++) {
-      state[y][x] = +(Math.random() < aliveChance);
+  if (Math.random() > 0.5) {
+    // random state
+    for (let y = 0; y < numRows; y++) {
+      for (let x = 0; x < numCols; x++) {
+        state[y][x] = +(Math.random() < chanceOfLife);
+      }
+    }
+  } else {
+    // gosper glider gun
+    let shape = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    for (let y = 0; y < numRows; y++) {
+      for (let x = 0; x < numCols; x++) {
+        state[y][x] = (shape[y] && shape[y][x]) ? shape[y][x] : 0;
+      }
     }
   }
 
-  setInterval(() => {
+  paintCanvas(canvas, cellSize, state);
+
+  let intervalId = setInterval(() => {
     window.requestAnimationFrame(() => {
-      const nextState = getNextState(state);
-      paintCanvas(canvas, cellSize, state, nextState);
-      state = nextState;
+      const oldState = state;
+      state = getNextState(state);
+      paintCanvas(canvas, cellSize, state, oldState);
     });
   }, intervalDuration)
+
+  document.addEventListener('keydown', (e) =>{
+    if (e.code === 'Space') {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      } else {
+        intervalId = setInterval(() => {
+          window.requestAnimationFrame(() => {
+            const nextState = getNextState(state);
+            paintCanvas(canvas, cellSize, state, nextState);
+            state = nextState;
+          });
+        }, intervalDuration)
+      }
+    }
+  });
 });
 
 function getNextState(state) {
@@ -65,20 +107,20 @@ function getNumAliveNeighbors(state, x, y) {
   return numAliveNeighbors;
 }
 
-function paintCanvas(canvas, cellSize, oldState, newState) {
+function paintCanvas(canvas, cellSize, state, oldState = null) {
   const context = canvas.getContext('2d');
-  for (let y = 0; y < newState.length; y++) {
-    for (let x = 0; x < newState[0].length; x++) {
-      if (oldState[y][x] === newState[y][x]) continue;
-      if (newState[y][x] === 0) context.fillStyle = '#fff';
-      if (newState[y][x] === 1) context.fillStyle = '#0095ff';
-      if (newState[y][x] === 2) context.fillStyle = '#bee3fe';
+  for (let y = 0; y < state.length; y++) {
+    for (let x = 0; x < state[0].length; x++) {
+      if (oldState && oldState[y][x] === state[y][x]) continue;
+      if (state[y][x] === 0) context.fillStyle = '#fff';
+      if (state[y][x] === 1) context.fillStyle = '#0095ff';
+      if (state[y][x] === 2) context.fillStyle = '#bee3fe';
 
       // rounded rect
       // const cell = new Path2D();
       // cell.roundRect(x * cellSize, y * cellSize, cellSize, cellSize, [cellSize / 2]);
       // context.fill(cell);
-
+      
       // rect
       context.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
     }

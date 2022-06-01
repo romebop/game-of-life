@@ -29,6 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
         game.start();
       }
     }
+    if (e.code === 'Equal') {
+      game.speedUp();
+    }
+    if (e.code === 'Minus') {
+      game.slowDown();
+    }
   });
 });
 
@@ -79,6 +85,20 @@ class Game {
     clearInterval(this.intervalID);
     // this.paintCanvas();
     this.intervalID = null;
+  }
+
+  speedUp() {
+    if (this.stepDuration > 10) {
+      this.stepDuration -= 10;
+    }
+    this.stop();
+    this.start();
+  }
+
+  slowDown() {
+    this.stepDuration += 10;
+    this.stop();
+    this.start();
   }
 
   getNextState() {

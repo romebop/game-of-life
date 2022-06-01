@@ -1,8 +1,7 @@
-// check with window
 document.addEventListener('DOMContentLoaded', () => {
   
   const cellSize = 5;
-  const stepDuration = 50;
+  const stepDuration = 10;
   const chanceOfLife = 0.1;
 
   const containerWidth = window.innerWidth;
@@ -71,10 +70,8 @@ class Game {
 
   start() {
     this.intervalID = setInterval(() => {
-      window.requestAnimationFrame(() => {
-        this.getNextState();
-        this.paintCanvas();
-      });
+      this.getNextState();
+      this.paintCanvas();
     }, this.stepDuration);
   }
 
@@ -121,9 +118,9 @@ class Game {
         if (cell.state === 2) context.fillStyle = '#fff';
                 
         // rounded rect
-        // const cell = new Path2D();
-        // cell.roundRect(x * cellSize, y * cellSize, cellSize, cellSize, [cellSize / 2]);
-        // context.fill(cell);
+        // const shape = new Path2D();
+        // shape.roundRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize, [this.cellSize / 2]);
+        // context.fill(shape);
         
         // rect
         context.fillRect(x * this.cellSize, y * this.cellSize, this.cellSize, this.cellSize);

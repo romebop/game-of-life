@@ -21,7 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const game = new Game(canvas, numRows, numCols, cellSize, stepDuration, chanceOfLife);
   game.start();
 
+  const modifiers = ['Meta', 'Alt', 'Control'];
+  let pressedKeys = [];
   window.addEventListener('keydown', e => {
+    pressedKeys.push(e.code);
     if (e.code === 'Space') {
       if (typeof(game.intervalID) === 'number') {
         game.stop();
@@ -29,12 +32,21 @@ document.addEventListener('DOMContentLoaded', () => {
         game.start();
       }
     }
-    if (e.code === 'Equal') {
-      game.speedUp();
+    if (
+      pressedKeys.every(k =>
+        !modifiers.some(m => k.includes(m))
+      )
+    ) {
+      if (e.code === 'Equal') {
+        game.speedUp();
+      }
+      if (e.code === 'Minus') {
+        game.slowDown();
+      }
     }
-    if (e.code === 'Minus') {
-      game.slowDown();
-    }
+  });
+  window.addEventListener('keyup', e => {
+    pressedKeys = pressedKeys.filter(k => k !== e.code);
   });
 });
 
@@ -90,9 +102,9 @@ class Game {
   speedUp() {
     if (this.stepDuration > 10) {
       this.stepDuration -= 10;
+      this.stop();
+      this.start();
     }
-    this.stop();
-    this.start();
   }
 
   slowDown() {

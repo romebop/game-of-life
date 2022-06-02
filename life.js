@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   addEventListeners(canvas, ['mousedown', 'touchstart'], e => {
-    e.stopPropagation();
+    e.preventDefault();
     game.stop();
     const mapIdx = maps.findIndex(m => m.name === map.name);
     map = maps[(mapIdx + 1) % maps.length];

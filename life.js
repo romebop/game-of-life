@@ -97,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     pressedKeys = pressedKeys.filter(k => k !== e.code);
   });
 
-  addEventListeners(canvas, ['mousedown', 'touchstart'], () => {
+  addEventListeners(canvas, ['mousedown', 'touchstart'], e => {
+    e.stopPropagation();
     game.stop();
     const mapIdx = maps.findIndex(m => m.name === map.name);
     map = maps[(mapIdx + 1) % maps.length];
@@ -126,6 +127,7 @@ class Game {
       : map.getLayout(this.numRows, this.numCols);
     this.clearCanvas();
     this.grid = [...Array(this.numRows)].map(() => Array(this.numCols).fill(null));
+    
     for (let y = 0; y < this.numRows; y++) {
       for (let x = 0; x < this.numCols; x++) {
         if (layout[y] && layout[y][x]) {
@@ -135,6 +137,7 @@ class Game {
         }
       }
     }
+
     for (let y = 0; y < this.numRows; y++) {
       for (let x = 0; x < this.numCols; x++) {
         const cell = this.grid[y][x];

@@ -12,7 +12,7 @@ class Game {
   }
 
   get isPaused() {
-    return typeof(this.intervalID) === 'number';
+    return this.intervalID === null;
   }
 
   loadMap(map) {

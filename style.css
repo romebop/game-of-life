@@ -1,9 +1,7 @@
 *, *::before, *::after {
   box-sizing: border-box;
-}
-
-* {
   margin: 0;
+  font-family: Helvetica Neue;
 }
 
 html, body {
@@ -12,4 +10,45 @@ html, body {
 
 canvas {
   display: block;
+}
+
+.notification {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #fff;
+  color: #444;
+  padding: 30px 60px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  animation: slide-in 250ms ease-in-out;
+  z-index: 999;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.notification .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  line-height: 12px;
+  cursor: pointer;
+}
+
+.notification .text {
+  padding: 6px 0;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
 }

@@ -41,7 +41,7 @@ canvas {
 }
 
 .notification .text {
-  padding: 6px 0;
+  padding: 4px 0;
 }
 
 @keyframes slide-in {

@@ -16,7 +16,7 @@ canvas {
   display: none;
   position: fixed;
   top: 20px;
-  left: 20px;
+  right: 20px;
   background-color: #fff;
   color: #444;
   padding: 30px 60px;
@@ -29,6 +29,10 @@ canvas {
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+.notification a.text {
+  text-decoration: none;
 }
 
 .notification .close {
@@ -46,7 +50,7 @@ canvas {
 
 @keyframes slide-in {
   from {
-    transform: translateX(-100%);
+    transform: translateX(100%);
   }
   to {
     transform: translateX(0%);

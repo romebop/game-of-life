@@ -69,15 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
     game.loadMap(map);
   });
 
-  // first visit
   document.querySelector('.close')
     .addEventListener('click', () => {
       document.querySelector('.notification').style.display = 'none';
     });
-  if (!document.cookie.includes('firstVisit=')) {
-    const date = new Date();
-    date.setTime(date.getTime() + Infinity);
-    document.cookie = `firstVisit=true; expires=${date.toUTCString()}; path=/`;  
-    document.querySelector('.notification').style.display = 'flex';
-  }
+  document.querySelector('.notification').style.display = 'flex';
 });
